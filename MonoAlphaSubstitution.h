@@ -41,14 +41,15 @@ public:
 	/// <param name="c"></param>
 	/// <returns></returns>  encrypted char
 	char& encrypt(char c) {
-		c = tolower(c);
-		std::cout << c;
+		int alphabet_size = alphabet->size();
+		for (int t =0;t<alphabet_size;t++)
+		char current_key = c;
 
 		for (int i = 0; i < map.size(); i ++ ) {  // iterates through the key to encrypt the selected char
 
-			char current_key = map[i];
+			char current_key = map[tolower(i)];
 
-			if (current_key == c && i % 2 == 0) {
+			if (current_key == c ) {
 				c = map[i + 1];
 			}
 
