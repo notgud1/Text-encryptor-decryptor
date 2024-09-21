@@ -3,6 +3,9 @@
 #include "Substitution.h"
 #include <vector>
 #include <string>
+#include <unordered_map>
+#include <algorithm> // For std::shuffle
+#include <random>    // For std::random_device and std::mt19937
 
 
 /*
@@ -16,123 +19,78 @@ for this example the user will input their own translation table for the program
 class MonoAlphaSubstitution :  Cipher
 {
 private:
-	std::string map; // this vec stores the mapping key that will be used to encrypt/decrypt the text 
+	std::unordered_map<char,char> map; // encryption map
+	std::unordered_map<char, char> reverse_map; //decryption map
+	std::string alphabet = { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" };
 
 public:
-	std::string alphabet[27] = { "abcdefghijklmnopqrstuvwxyz"};
-
-	// default contructor. // every letter is mapped to itself
+	// Default constructor. Every letter is mapped to a random character
 	MonoAlphaSubstitution() {
-		std::string map = this->map; 
-	}
+		// Create a randomized alphabet
+		std::string randomized_alphabet = alphabet;
 
-	/*
-	This constructor takes a string and creates a mapping where each character at an odd index maps to the one before it. Unmapped characters map to themselves.
-	For example, "ABBCCD" maps A -> B, B -> C, C -> D. An empty string results in all characters mapping to themselves. This works for any characters, not just letters.
-	*/
-	MonoAlphaSubstitution(std::string str) {
-		std::string map = this->map;
+		// Shuffle the alphabet
+		std::random_device rd;   // obtain a random number from hardware
+		std::mt19937 g(rd());    // seed the generator
+		std::shuffle(randomized_alphabet.begin(), randomized_alphabet.end(), g); // shuffle the alphabet
 
-	}
-
-	/// <summary>
-	/// takes a char and encrypts it
-	/// </summary>
-	/// <param name="c"></param>
-	/// <returns></returns>  encrypted char
-	char& encrypt(char c) {
-		int alphabet_size = alphabet->size();
-		for (int t =0;t<alphabet_size;t++)
-		char current_key = c;
-
-		for (int i = 0; i < map.size(); i ++ ) {  // iterates through the key to encrypt the selected char
-
-			char current_key = map[tolower(i)];
-
-			if (current_key == c ) {
-				c = map[i + 1];
-			}
-
-		}
-		return c;
-		
-	}
-
-	//decrypts char by key
-
-	char& decrypt(char c) {
-
-		for (int i = 0; i < map.size(); i++) {  // iterates through the key to encrypt the selected char
-
-			char current_key = map[i];
-
-			if (current_key == c && i % 2 != 0) {
-				c = map[i - 1];
-			}
-
-		}
-		return c;
-
-	}
-
-
-	// Method to handle command-line style arguments
-	void processArgs(const std::vector<std::string>& args) {
-		if (args.size() < 3) {
-			std::cout << "Too few parameters!\nUsage: MonoAlphaSubstitution encrypt key \"cipher text\"" << std::endl;
-		}
-		else if (args.size() > 3) {
-			std::cout << "Too many parameters!\nUsage: MonoAlphaSubstitution encrypt key \"cipher text\"" << std::endl;
-		}
-		else {
-			std::string eord = args[0];
-			std::string key = args[1];
-			std::string text = args[2];
-
-			MonoAlphaSubstitution test(key);
-
-			if (eord == "encrypt") {
-				std::string encryptedText;
-				for (char c : text) {
-					encryptedText += test.encrypt(c);
-				}
-				std::cout << encryptedText << std::endl;
-			}
-			else if (eord == "decrypt") {
-				std::string decryptedText;
-				for (char c : text) {
-					decryptedText += test.decrypt(c);
-				}
-				std::cout << decryptedText << std::endl;
-			}
-			else {
-				std::cout << "The first parameter must be \"encrypt\" or \"decrypt\"!\nUsage: MonoAlphaSubstitution encrypt key \"cipher text\"" << std::endl;
-			}
+		// Map each character in the original alphabet to a shuffled one for encryption
+		for (size_t i = 0; i < alphabet.length(); ++i) {
+			map[alphabet[i]] = randomized_alphabet[i];
+			reverse_map[randomized_alphabet[i]] = alphabet[i]; // Create reverse map for decryption
 		}
 	}
+
+	// Encrypt a single character
+	char encrypt(char c) {
+		if (map.find(c) != map.end()) {
+			return map[c]; // Return the encrypted character
+		}
+		return c; // Return original if character not found in the map
+	}
+
+	// Decrypt a single character
+	char decrypt(char c) {
+		if (reverse_map.find(c) != reverse_map.end()) {
+			return reverse_map[c]; // Return the decrypted character
+		}
+		return c; // Return original if character not found in the reverse map
+	}
+
+	// Print out the mapping for debugging
+	void printMapping() {
+		for (char c : alphabet) {
+			std::cout << c << " -> " << map[c] << std::endl;
+		}
+	}
+
 
 };
 
 int main() {
 
-	std::string key = "akbjcidhegffgehdicjbka";
-	std::string text_to_encrypt = "Life is wasted on the egg living.";
-	std::string encrypts = "encrypt";
-	std::vector<std::string> values1 = { encrypts,key,text_to_encrypt };
+	MonoAlphaSubstitution substitution;
 
-	std::string text_to_decrypt = "Lcfe cs wasted on tde eee lcvcne.";
-	std::string _decrypt = "decrypt";
+	// Print the random mapping
+	substitution.printMapping();
 
-	std::vector<std::string> values2 = { _decrypt,key,text_to_decrypt};
+	// Encrypt a sample text
+	std::string original_text = "Living.";
+	std::string encrypted_text;
+	for (char c : original_text) {
+		encrypted_text += substitution.encrypt(c);
+	}
 
-	MonoAlphaSubstitution mon;
-	mon.processArgs(values1);
+	std::cout << "Original: " << original_text << std::endl;
+	std::cout << "Encrypted: " << encrypted_text << std::endl;
 
-	std::cout << "\n";
+	// Decrypt the text
+	std::string decrypted_text;
+	for (char c : encrypted_text) {
+		decrypted_text += substitution.decrypt(c);
+	}
 
-	MonoAlphaSubstitution mon2;
-	mon.processArgs(values2);
-
+	std::cout << "Decrypted: " << decrypted_text << std::endl;
 
 	return 0;
 

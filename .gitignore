@@ -1,0 +1,24 @@
+# Ignore build files
+/build/
+/x64/Debug/
+*.obj
+*.pdb
+*.exe
+*.lib
+*.dll
+*.out
+*.log
+
+# Ignore Visual Studio files
+.vscode/
+*.vcxproj
+*.vcxproj.user
+*.sln
+
+# Ignore system files
+*.DS_Store
+/.vs/Decoder/FileContentIndex
+/.vs/Decoder/v17/ipch/AutoPCH
+/.vs/Decoder/v17
+/Decoder/x64/Debug
+/Decoder.vcxproj.filters
