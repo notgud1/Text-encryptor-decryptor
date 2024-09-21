@@ -19,6 +19,7 @@ private:
 	std::string map; // this vec stores the mapping key that will be used to encrypt/decrypt the text 
 
 public:
+	std::string alphabet[27] = { "abcdefghijklmnopqrstuvwxyz"};
 
 	// default contructor. // every letter is mapped to itself
 	MonoAlphaSubstitution() {
@@ -40,6 +41,8 @@ public:
 	/// <param name="c"></param>
 	/// <returns></returns>  encrypted char
 	char& encrypt(char c) {
+		c = tolower(c);
+		std::cout << c;
 
 		for (int i = 0; i < map.size(); i ++ ) {  // iterates through the key to encrypt the selected char
 
