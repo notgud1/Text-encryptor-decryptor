@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <algorithm> // For std::shuffle
 #include <random>    // For std::random_device and std::mt19937
+#include <fstream>
 
 
 /*
@@ -60,41 +61,52 @@ public:
 	// Print out the mapping for debugging
 	void printMapping() {
 		for (char c : alphabet) {
-			std::cout << c << " -> " << map[c] << std::endl;
+			std::cout  << c << " -> " << map[c] << " ";
 		}
 	}
+
+	// store the mapping for file save 
+	std::string CreateMappingKey() {
+		std::string key;
+		for (char c : alphabet) {
+			key += c, "->", map[c]," ";
+		}
+		return key;
+	}
+
+
 
 
 };
 
-int main() {
-
-	MonoAlphaSubstitution substitution;
-
-	// Print the random mapping
-	substitution.printMapping();
-
-	// Encrypt a sample text
-	std::string original_text = "Living.";
+//stores the encrypted word, and the key in a file
+void storeEncryptedInfotoFile(std::string word) {
+	MonoAlphaSubstitution new_word;				// initialse class for us to create everything
+	std::string encrypted_word;
 	std::string encrypted_text;
-	for (char c : original_text) {
-		encrypted_text += substitution.encrypt(c);
+	
+	for (char c : word) {
+		encrypted_text += new_word.encrypt(c);
 	}
 
-	std::cout << "Original: " << original_text << std::endl;
-	std::cout << "Encrypted: " << encrypted_text << std::endl;
+	std::string key;
+	key = new_word.CreateMappingKey();
 
-	// Decrypt the text
-	std::string decrypted_text;
-	for (char c : encrypted_text) {
-		decrypted_text += substitution.decrypt(c);
+
+	// creates the location of where the encrypted data will be saved (The std::ios::add allows us to save multip
+	//-le versions of the encrypted data
+	std::ofstream file("C:\\Users\\mirsa\\OneDrive\\Desktop\\Coding projects\\Encryption.txt", std::ios::app);
+
+
+	// Check if the file was successfully opened
+	if (!file.is_open()) {
+		std::cerr << "Error: Could not open the file at the specified path." << std::endl;
+		return;
 	}
 
-	std::cout << "Decrypted: " << decrypted_text << std::endl;
 
-	return 0;
+	//this just adds the variables to the .txt file
+	file <<"Original: " << word << "\n"<< "Encrypted: " << encrypted_text << "\n" << "Key: " << key << "\n\n";
+	file.close();
 
 }
-
-
-
