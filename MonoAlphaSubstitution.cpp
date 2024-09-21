@@ -27,6 +27,10 @@ int main() {
 		for (char c : encrypted_text) {
 			decrypted_text += substitution.decrypt(c);
 		}
+	
+		//print out encrypted word 
+		std::cout << "Word: " << word;
+		std::cout << "Encrypted: " << encrypted_text << "\n";
 
 		//create file for saved encryption data
 		storeEncryptedInfotoFile(word);

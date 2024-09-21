@@ -58,7 +58,7 @@ public:
 		return c; // Return original if character not found in the reverse map
 	}
 
-	// Print out the mapping for debugging
+	// Print out the mapping for debugging. 
 	void printMapping() {
 		for (char c : alphabet) {
 			std::cout  << c << " -> " << map[c] << " ";
@@ -69,13 +69,13 @@ public:
 	std::string CreateMappingKey() {
 		std::string key;
 		for (char c : alphabet) {
-			key += c, "->", map[c]," ";
+			key += c;
+			key += ":";
+			key += map[c];
+			key+=" ";
 		}
 		return key;
 	}
-
-
-
 
 };
 
@@ -95,7 +95,7 @@ void storeEncryptedInfotoFile(std::string word) {
 
 	// creates the location of where the encrypted data will be saved (The std::ios::add allows us to save multip
 	//-le versions of the encrypted data
-	std::ofstream file("C:\\Users\\mirsa\\OneDrive\\Desktop\\Coding projects\\Encryption.txt", std::ios::app);
+	std::ofstream file("C:\\Users\\mirsa\\OneDrive\\Desktop\\Coding projects\\Encrypted text.txt", std::ios::app);
 
 
 	// Check if the file was successfully opened
