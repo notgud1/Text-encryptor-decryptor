@@ -1,4 +1,0 @@
-﻿  MonoAlphaSubstitution.cpp
-C:\Users\mirsa\source\repos\Decoder\MonoAlphaSubstitution.h(56,1): warning C4172: returning address of local variable or temporary : c
-C:\Users\mirsa\source\repos\Decoder\MonoAlphaSubstitution.h(73,1): warning C4172: returning address of local variable or temporary : c
-  Decoder.vcxproj -> C:\Users\mirsa\source\repos\Decoder\x64\Debug\Decoder.exe
