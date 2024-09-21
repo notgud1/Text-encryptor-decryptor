@@ -1,8 +1,6 @@
 #include "MonoAlphaSubstitution.h"
 
 int main() {
-
-
 	int choice=1;
 
 	do
@@ -29,7 +27,7 @@ int main() {
 		}
 	
 		//print out encrypted word 
-		std::cout << "Word: " << word;
+		std::cout << "Word: " << word<<"\n";
 		std::cout << "Encrypted: " << encrypted_text << "\n";
 
 		//create file for saved encryption data
