@@ -42,6 +42,15 @@ public:
 		}
 	}
 
+
+	//Creates a decryption map that allows us to decrypt text later on
+	void decryptwithkey(std::string key) {
+		reverse_map.clear(); // Clear the current reverse map
+		for (int i = 0; i < alphabet.size(); i++) {
+			reverse_map[key[i]] = alphabet[i];
+		}
+	}
+
 	// Encrypt a single character
 	char encrypt(char c) {
 		if (map.find(c) != map.end()) {
@@ -69,10 +78,7 @@ public:
 	std::string CreateMappingKey() {
 		std::string key;
 		for (char c : alphabet) {
-			key += c;
-			key += ":";
 			key += map[c];
-			key+=" ";
 		}
 		return key;
 	}
