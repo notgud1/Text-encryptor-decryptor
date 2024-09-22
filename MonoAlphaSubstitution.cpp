@@ -54,7 +54,6 @@ void decryptText() {
 }
 
 int main() {
-    decryptText();
 
     return 0;
 }
